@@ -25,7 +25,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       // upperBound: 100.0,
     );
     // animation = CurvedAnimation(parent: controller, curve: Curves.decelerate);
-    animation = ColorTween(begin: Colors.lightBlue, end: Colors.white)
+    animation = ColorTween(begin: Colors.blueGrey, end: Colors.white)
         .animate(controller);
 
     controller.forward();
@@ -69,6 +69,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   ),
                 ),
                 TypewriterAnimatedTextKit(
+                  speed: Duration(milliseconds: 500),
                   text: [
                     'Flash Chat',
                   ],
@@ -91,7 +92,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             ),
             RoundedButton(
               title: 'Register',
-              color: Colors.lightBlueAccent,
+              color: Colors.blueAccent,
               onPressed: () {
                 Navigator.pushNamed(context, RegistrationScreen.id);
               },
