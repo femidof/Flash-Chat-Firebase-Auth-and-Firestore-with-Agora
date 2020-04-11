@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat/components/call.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
+import 'package:wakelock/wakelock.dart';
 
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
@@ -47,8 +48,10 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() async {
       if (call == 'true') {
         checker = true;
+        Wakelock.toggle(on: checker);
       } else {
         checker = false;
+        Wakelock.toggle(on: checker);
       }
     });
   }
@@ -117,6 +120,8 @@ class _ChatScreenState extends State<ChatScreen> {
                             _firestore.collection('messages').add({
                               'text': messageText,
                               'sender': loggedInUser.email,
+                              'timestamp':
+                                  DateTime.now().toUtc().millisecondsSinceEpoch,
                             });
                           },
                           child: Text(
@@ -231,7 +236,10 @@ class MessagesStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection('messages').snapshots(),
+      stream: _firestore
+          .collection('messages')
+          .orderBy('timestamp', descending: true)
+          .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
